@@ -1,0 +1,30 @@
+sudo apt update
+sudo apt upgrade -y
+sudo apt install ansible -y
+ansible --version
+
+mkdir ansible-lab
+cd ansible-lab
+
+nano hosts.ini
+[local]
+localhost ansible_connection=local
+
+nano setup.yml
+---
+- name: Basic Server Setup
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+
+ansible-playbook -i hosts.ini setup.yml
+curl --version
